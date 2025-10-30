@@ -5,36 +5,37 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-
+        int opcao;
+        int rep = 0;
         Scanner in = new Scanner(System.in);
+        do {
+            if(rep > 0) {
+                System.out.println("Deseja fazer mais alguma coisa");
+            } else{
+                System.out.println("Deseja fazer oq");
+            }
+            System.out.println("0 - Cadastrar Cliente");
 
-        Cliente cliente1 = new Cliente();
+            System.out.println("1 - Cadastrar produto");
 
-        System.out.print("Nome do cliente: ");
-        cliente1.setNome(in.nextLine());
+            System.out.println("2 - Sair");
 
-        System.out.print("Location do cliente: ");
-        cliente1.setLocation(in.nextLine());
+            opcao = in.nextInt();
 
-        System.out.print("Numero de pedidos do cliente: ");
-        cliente1.setPedidos(in.nextInt());
-
-        System.out.print("Id do Cliente: ");
-        cliente1.setId(in.nextInt());
-        in.nextLine();
-        System.out.print("Email do Cliente: ");
-        cliente1.setEmail(in.nextLine());
-
-        cliente1.dadosCliente();
-
-        Produto blusa = new Produto();
-
-        System.out.print("Valor da blusa: ");
-        blusa.setValor(in.nextDouble());
-        in.nextLine();
-
-        blusa.dadosProduto();
-
+            Cliente cliente01 = new Cliente();
+            Produto produto01 = new Produto();
+            switch (opcao) {
+                case 0:
+                    cliente01.CadastrarCliente();
+                    break;
+                case 1:
+                    produto01.CadastrarProduto();
+                    break;
+                default:
+                    System.out.println("Encerrando");
+            }
+            rep++;
+        } while (opcao != 2);
         in.close();
     }
 }
