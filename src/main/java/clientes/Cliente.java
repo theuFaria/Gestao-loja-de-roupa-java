@@ -12,8 +12,19 @@ public class Cliente {
     private String emailCliente;
     private String telefoneCliente;
 
+    public Cliente() {
+        SetId(1);
+        SetPedidos(0);
+
+        // Fazer o ID com base no array de clientes.
+    }
+
     public void AdicionarPedido(int n) {
-        nPedidos += n;
+        if (n > 0){
+            nPedidos += n;
+        } else {
+            System.out.println("Não se pode adicionar 0 ou números negativas à quantidade de pedidos.");
+        }
     }
 
     public int GetPedidos() {
@@ -40,72 +51,6 @@ public class Cliente {
         this.nome = nome;
     }
 
-    private void CadastrarNome() {
-        String nomeTest;
-        do {
-            Scanner in = new Scanner(System.in);
-            System.out.print("Nome: ");
-            nomeTest = in.nextLine();
-
-            nome = nomeTest;
-            if (nome.isEmpty()) {
-                System.out.println("Nome inválido, por favor digite novamente");
-            }
-        } while (nomeTest.isBlank());
-    }
-
-    private void CadastrarEmail() {
-        boolean ok = true;
-        do {
-            Scanner in = new Scanner(System.in);
-            System.out.print("Email: ");
-            String email = in.nextLine();
-
-            Pattern p = Pattern.compile("^[a-zA-Z]+\\d*[a-zA-Z]*@\\d*[a-zA-Z]*\\d*\\.[a-z]{2,3}$");
-            Matcher m = p.matcher(email);
-
-            if (m.find()) {
-                emailCliente = email;
-                ok = false;
-            } else {
-                System.out.println("Email inválido");
-            }
-        } while (ok);
-    }
-
-    private void CadastrarLocation() {
-        Scanner in = new Scanner(System.in);
-
-        System.out.print("Localização: ");
-        location = in.nextLine();
-    }
-
-    private void CadastrarTelefone() {
-        boolean ok = true;
-        do {
-            Scanner in = new Scanner(System.in);
-            System.out.print("Telefone: ");
-            String tel = in.nextLine();
-
-            Pattern padrao = Pattern.compile("^(\\d{13}|\\d{11}|\\d{2}[- ](\\d{9}|\\d{11}|\\d{2}[- ]\\d{9}))$");
-            Matcher teste = padrao.matcher(tel);
-
-            if (teste.matches()) {
-                telefoneCliente = tel;
-                ok = false;
-            } else {
-                System.out.println("Número inválido");
-            }
-        } while (ok);
-    }
-
-    public void CadastrarCliente() {
-        CadastrarNome();
-        CadastrarEmail();
-        CadastrarTelefone();
-        CadastrarLocation();
-    }
-
     public String GetLocation() {
         return location;
     }
@@ -126,16 +71,88 @@ public class Cliente {
         telefoneCliente = tel;
     }
 
-    public String getTelefone() {
+    public String GetTelefone() {
         return telefoneCliente;
     }
 
+    private void CadastrarNome() {
+        String nomeTest;
+        do {
+            Scanner in = new Scanner(System.in);
+            System.out.print("Nome: ");
+            nomeTest = in.nextLine();
+
+            SetNome(nomeTest);
+            if (nome.isBlank()) {
+                System.out.println("Nome inválido, por favor digite novamente");
+            }
+        } while (nomeTest.isBlank());
+    }
+
+    private void CadastrarEmail() {
+        boolean ok = true;
+        do {
+            Scanner in = new Scanner(System.in);
+            System.out.print("Email: ");
+            String email = in.nextLine();
+
+            Pattern p = Pattern.compile("^[a-zA-Z]+\\d*[a-zA-Z]*@\\d*[a-zA-Z]*\\d*\\.[a-z]{2,3}$");
+            Matcher m = p.matcher(email);
+
+            if (m.find()) {
+                SetEmail(email);
+                ok = false;
+            } else {
+                System.out.println("Email inválido");
+            }
+        } while (ok);
+    }
+
+    private void CadastrarLocation() {
+        Scanner in = new Scanner(System.in);
+
+        System.out.print("Localização: ");
+        SetLocation(in.nextLine());
+
+        // Sem ideia de como fazer uma validação para isso ainda.
+    }
+
+    private void CadastrarTelefone() {
+        boolean ok = true;
+        do {
+            Scanner in = new Scanner(System.in);
+            System.out.print("Telefone: ");
+            String tel = in.nextLine();
+
+            Pattern padrao = Pattern.compile("^(\\d{13}|\\d{11}|\\d{2}[- ](\\d{9}|\\d{11}|\\d{2}[- ]\\d{9}))$");
+            Matcher teste = padrao.matcher(tel);
+
+            if (teste.matches()) {
+                SetTelefone(tel);
+                ok = false;
+            } else {
+                System.out.println("Número inválido");
+            }
+        } while (ok);
+    }
+
+    public void CadastrarCliente () {
+        CadastrarNome();
+        CadastrarEmail();
+        CadastrarTelefone();
+        CadastrarLocation();
+
+        // Adicionar esse cliente cadastrado em um array, para guardar a informação.
+    }
+
+
     public void dadosCliente() {
-        System.out.println("Nome: " + nome);
-        System.out.println("Id: " + idCliente);
-        System.out.println("Location: " + location);
-        System.out.println("Pedidos: " + nPedidos);
-        System.out.println("Email: " + emailCliente);
+        System.out.println("Nome: " + this.nome);
+        System.out.println("Id: " + this.idCliente);
+        System.out.println("Location: " + this.location);
+        System.out.println("Pedidos: " + this.nPedidos);
+        System.out.println("Email: " + this.emailCliente);
+        System.out.println("Telefone: " + this.telefoneCliente);
     }
 }
 

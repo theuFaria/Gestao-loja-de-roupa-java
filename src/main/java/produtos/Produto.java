@@ -6,76 +6,99 @@ public class Produto {
     private int id;
     private double valor;
     private int emEstoque;
+    private String nome;
 
-    public void setId(int idNovo) {
+
+    public Produto() {
+        SetId(1);
+        // Definir o ID com base no array de produtos.
+    }
+
+    public void SetId(int idNovo) {
         id = idNovo;
     }
 
-    public int getId() {
+    public int GetId() {
         return id;
     }
 
-    public void setValor(double valorNovo) {
+    public void SetValor(double valorNovo) {
         valor = valorNovo;
     }
 
-    public double getValor() {
+    public double GetValor() {
         return valor;
     }
 
-    public void setEmEstoque(int emEstoqueNovo) {
+    public void SetEmEstoque(int emEstoqueNovo) {
         emEstoque = emEstoqueNovo;
     }
 
-    public int getEstoque() {
+    public int GetEstoque() {
         return emEstoque;
     }
 
-    private void CadastrarValor(Produto p) {
-        boolean ok = true;
+    public String GetNome() {return nome;}
+
+    public void SetNome(String nome) {this.nome = nome;}
+
+    private void CadastrarValor() {
+        boolean ok = false;
         do {
             Scanner in = new Scanner(System.in);
             System.out.print("Valor: ");
             double valor = in.nextDouble();
             if (valor > 0) {
-                p.valor = valor;
-                ok = false;
+                SetValor(valor);
+                ok = true;
             } else if (valor <= 0) {
                 System.out.println("Valor não pode ser negativo ou 0");
             } else {
                 System.out.println("Valor inválido");
             }
-        } while (ok);
+        } while (!ok);
     }
 
-    public void CadastrarEstoque(Produto p) {
-        boolean ok = true;
+    private void CadastrarQEmEstoque() {
+        int pedidos;
+       do {
+           Scanner in = new Scanner(System.in);
+           System.out.print("Quantidade em estoque: ");
+           pedidos = in.nextInt();
+           if(pedidos > 0) {
+               SetEmEstoque(pedidos);
+           } else {
+               System.out.println("Quantidade em estoque não pode ser negativa.");
+           }
+       } while(this.emEstoque != pedidos);
+    }
+
+    private void CadastrarNome() {
+        String nome;
         do {
             Scanner in = new Scanner(System.in);
-            System.out.print("Quantos: ");
-            int q = in.nextInt();
-            if (q > 0) {
-                p.emEstoque = q;
-                ok = false;
-            } else if (q == 0) {
-                System.out.println("Não se pode cadastrar 0 produtos.");
-            } else {
-                System.out.println("Número inválido");
+            System.out.print("Nome do produto: ");
+            nome = in.nextLine();
+
+            SetNome(nome);
+            if (nome.isBlank()) {
+                System.out.println("Nome inválido, por favor digite novamente");
             }
-        } while (ok);
+        } while (nome.isBlank());
     }
 
 
     public void CadastrarProduto() {
-        Produto novoP = new Produto();
-        CadastrarValor(novoP);
-        CadastrarEstoque(novoP);
+        CadastrarNome();
+        CadastrarValor();
+        CadastrarQEmEstoque();
     }
 
     public void dadosProduto() {
-        System.out.println("Id: " + id);
-        System.out.println("Valor: " + valor);
-        System.out.println("Em Estoque: " + emEstoque);
+        System.out.println("Nome: " + this.nome);
+        System.out.println("Id: " + this.id);
+        System.out.println("Valor: " + this.valor);
+        System.out.println("Em Estoque: " + this.emEstoque);
     }
 }
 
