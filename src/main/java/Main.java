@@ -1,5 +1,7 @@
-import clientes.Cliente;
-import produtos.Produto;
+import estoque.Cliente;
+import estoque.Estoque;
+import produtos.Blusa;
+import produtos.Calca;
 
 import java.util.Scanner;
 
@@ -7,9 +9,11 @@ public class Main {
     public static void main(String[] args) {
         int opcao;
         int rep = 0;
-        Scanner in = new Scanner(System.in);
-        Produto p1 = new Produto();
         Cliente c1 = new Cliente();
+        Blusa b1 = new Blusa();
+        Calca calça = new Calca();
+        Scanner in = new Scanner(System.in);
+
         do {
             if (rep > 0) {
                 System.out.println("Deseja fazer mais alguma coisa?");
@@ -20,9 +24,11 @@ public class Main {
 
             System.out.println("2 - Cadastrar produto");
 
-            System.out.println("3 - Ver cliente");
+            System.out.println("3 - Ver clientes");
 
-            System.out.println("4 - Ver produto");
+            System.out.println("4 - Ver produtos");
+
+            System.out.println("5 - Ver Estoque");
 
             System.out.println("0 - Sair");
 
@@ -30,34 +36,26 @@ public class Main {
 
             switch (opcao) {
                 case 1:
-                    c1.CadastrarCliente();
+                    Estoque.cadastrarCliente();
                     break;
                 case 2:
-                    p1.CadastrarProduto();
+                    Estoque.cadastrarRoupa();
                     break;
                 case 3:
-                    System.out.println("--------------------------------------");
-                    if (c1.GetNome() == null) {
-                        System.out.println("Não há clientes cadastrados.");
-                    } else {
-                        c1.dadosCliente();
-                    }
-                    System.out.println("--------------------------------------");
+                    Estoque.mostrarClientes();
                     break;
                 case 4:
                     System.out.println("--------------------------------------");
-                    if (p1.GetNome() == null) {
-                        System.out.println("Não há produtos cadastrados.");
-                    } else {
-                        p1.dadosProduto();
-                    }
+                    // Mesma coisa dos Clientes.
                     System.out.println("--------------------------------------");
+                    break;
+                case 5:
+                    Estoque.mostrarEstoque();
                     break;
                 default:
                     System.out.println("Encerrando...");
             }
             rep = 1;
         } while (opcao != 0);
-        in.close();
     }
 }

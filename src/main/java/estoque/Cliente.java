@@ -1,4 +1,4 @@
-package clientes;
+package estoque;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -6,24 +6,30 @@ import java.util.regex.Pattern;
 
 public class Cliente {
     private String nome;
-    private int idCliente;
+    private String idCliente;
     private String location;
     private int nPedidos;
     private String emailCliente;
     private String telefoneCliente;
 
     public Cliente() {
-        SetId(1);
         SetPedidos(0);
-
-        // Fazer o ID com base no array de clientes.
     }
 
     public void AdicionarPedido(int n) {
-        if (n > 0){
+        if (n > 0) {
             nPedidos += n;
         } else {
             System.out.println("Não se pode adicionar 0 ou números negativas à quantidade de pedidos.");
+        }
+    }
+
+    public void setIdCliente(){
+        int n = Estoque.arrayClientes.size() + 1;
+        if (n < 10){
+            this.idCliente = "0"+n;
+        } else{
+            this.idCliente = ""+n;
         }
     }
 
@@ -35,12 +41,8 @@ public class Cliente {
         nPedidos = n;
     }
 
-    public int GetId() {
+    public String GetId() {
         return idCliente;
-    }
-
-    public void SetId(int idNovo) {
-        idCliente = idNovo;
     }
 
     public String GetNome() {
@@ -136,24 +138,20 @@ public class Cliente {
         } while (ok);
     }
 
-    public void CadastrarCliente () {
+    void CadastrarCliente() {
         CadastrarNome();
         CadastrarEmail();
         CadastrarTelefone();
         CadastrarLocation();
-
-        // Adicionar esse cliente cadastrado em um array, para guardar a informação.
+        setIdCliente();
     }
 
-
-    public void dadosCliente() {
-        System.out.println("Nome: " + this.nome);
-        System.out.println("Id: " + this.idCliente);
-        System.out.println("Location: " + this.location);
-        System.out.println("Pedidos: " + this.nPedidos);
-        System.out.println("Email: " + this.emailCliente);
-        System.out.println("Telefone: " + this.telefoneCliente);
+    @Override
+    public String toString() {
+        return "Nome: " + GetNome() + "\n" + "Id: " + GetId() + "\n" + "Location: " + GetLocation()
+                + "\n" + "Pedidos: "+ GetPedidos() +
+                "\n" + "Email: " + GetEmail()
+                + "\n" + "Telefone: " + GetTelefone();
     }
 }
-
 
