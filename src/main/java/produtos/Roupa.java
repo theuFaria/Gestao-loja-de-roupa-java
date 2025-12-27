@@ -1,38 +1,53 @@
 package produtos;
 
 import estoque.Estoque;
+import estoque.Exibivel;
 
-import java.util.Scanner;
-
-public abstract class Roupa {
+public abstract class Roupa implements Exibivel {
     protected String id;
-    protected double valor;
+    protected double precoBase;
     protected int emEstoque;
     protected String nome;
-    protected int tamanho;
-    // 0 - pp
-    // 1 - p
-    // 2 - m
-    // 3 - g
-    // 4 - gg
+    protected String tamanho;
+    protected boolean disponivel;
+    protected final int taxa = 50;
+
+    private Categoria categoria;
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
+    public Roupa(String nome, Double valor, String tamanho, int emEstoque, Categoria categoria) {
+        setTamanho(tamanho);
+        setNome(nome);
+        setPrecoBase(valor);
+        setEmEstoque(emEstoque);
+        setCategoria(categoria);
+        setId();
+    }
 
     public Roupa() {
-
     }
-    private void setId(){
-        int n = Estoque.getQuantidadeBlusas() + Estoque.getQuantidadeCalcas() + 1;
-        if (n < 10){
-            this.id = "0"+n;
-        } else{
-            this.id = ""+n;
+
+    protected void setId() {
+        int nRoupas = Estoque.quantidadeDeRoupas();
+        if (nRoupas < 10) {
+            this.id = "0" + nRoupas;
+        } else {
+            this.id = "" + nRoupas;
         }
     }
 
-    public int getTamanho() {
+    public String getTamanho() {
         return tamanho;
     }
 
-    public void setTamanho(int tamanho) {
+    public void setTamanho(String tamanho) {
         this.tamanho = tamanho;
     }
 
@@ -40,15 +55,18 @@ public abstract class Roupa {
         return id;
     }
 
-    public void setValor(double valorNovo) {
-        valor = valorNovo;
+    public void setPrecoBase(double valorNovo) {
+        precoBase = valorNovo;
     }
 
-    public double getValor() {
-        return valor;
+    public double getPrecoBase() {
+        return precoBase;
     }
 
     public void setEmEstoque(int emEstoqueNovo) {
+        if (emEstoqueNovo == 0) {
+            disponivel = false;
+        }
         emEstoque = emEstoqueNovo;
     }
 
@@ -56,59 +74,60 @@ public abstract class Roupa {
         return emEstoque;
     }
 
-    public String getNome() {return nome;}
+    public String getNome() {
+        return nome;
+    }
 
-    public void setNome(String nome) {this.nome = nome;}
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-    private void cadastrarValor() {
-        boolean ok = false;
+    protected double cadastrarPrecoBase() {
         do {
-            Scanner in = new Scanner(System.in);
             System.out.print("Valor: ");
-            double valor = in.nextDouble();
+            double valor = Estoque.in.nextDouble();
             if (valor > 0) {
-                setValor(valor);
-                ok = true;
+                return valor;
             } else if (valor <= 0) {
                 System.out.println("Valor não pode ser negativo ou 0");
             } else {
                 System.out.println("Valor inválido");
             }
-        } while (!ok);
+        } while (true);
+
     }
 
-    private void cadastrarQEmEstoque() {
+    protected int cadastrarQEmEstoque() {
         int pedidos;
-        Scanner in = new Scanner(System.in);
-       do {
-           System.out.print("Quantidade a ser adicionada ao estoque: ");
-           pedidos = in.nextInt();
-           if(pedidos > 0) {
-               setEmEstoque(pedidos);
-           } else {
-               System.out.println("Quantidade a ser adicionada não pode ser negativa.");
-           }
-       } while(this.emEstoque != pedidos);
+        do {
+            System.out.print("Quantidade a ser adicionada ao estoque: ");
+            pedidos = Estoque.in.nextInt();
+            if (pedidos > 0) {
+                return pedidos;
+            } else {
+                System.out.println("Quantidade a ser adicionada não pode ser negativa.");
+            }
+        } while (true);
     }
 
-    private void cadastrarNome() {
+    protected String cadastrarNome() {
         String nome;
         do {
-            Scanner in = new Scanner(System.in);
+            Estoque.in.nextLine();
             System.out.print("Nome do produto: ");
-            nome = in.nextLine();
+            nome = Estoque.in.nextLine();
 
-            setNome(nome);
             if (nome.isBlank()) {
                 System.out.println("Nome inválido, por favor digite novamente");
+            } else {
+                return nome;
             }
         } while (nome.isBlank());
+        return "Erro";
     }
 
-    private void cadastrarTamanho(){
-        Scanner in = new Scanner(System.in);
+    protected String cadastrarTamanho() {
         int opcao;
-        boolean ok = true;
         do {
             System.out.println("Qual tamanho?");
             System.out.println("1 - pp");
@@ -116,47 +135,41 @@ public abstract class Roupa {
             System.out.println("3 - m");
             System.out.println("4 - g");
             System.out.println("5 - gg");
-            opcao = in.nextInt();
+            opcao = Estoque.in.nextInt();
 
-            switch (opcao){
+            switch (opcao) {
                 case 1:
-                    setTamanho(0);
-                    ok = false;
-                    break;
+                    return "PP";
                 case 2:
-                    setTamanho(1);
-                    ok = false;
-                    break;
+                    return "P";
                 case 3:
-                    setTamanho(2);
-                    ok = false;
-                    break;
+                    return "M";
                 case 4:
-                    setTamanho(3);
-                    ok = false;
-                    break;
+                    return "G";
                 case 5:
-                    setTamanho(4);
-                    ok = false;
-                    break;
+                    return "GG";
                 default:
                     System.out.println("Escolha um tamanho");
             }
-        } while(ok);
-    }
-
-    protected void cadastrarRoupa() {
-        cadastrarNome();
-        cadastrarValor();
-        cadastrarTamanho();
-        cadastrarQEmEstoque();
-        setId();
+        } while (true);
     }
 
     @Override
+    public void exibir() {
+        System.out.println("Nome: " + getNome() + "\n"
+                + "Categoria: " + getCategoria() + "\n"
+                + "ID: " + getId() + "\n"
+                + "Valor: R$ " + getPrecoBase() + "\n"
+                + "Em Estoque: " + getEstoque() + "\n"
+                + "Tamanho: " + getTamanho()+ "\n"+
+                "-------------------------------");
+    }
+
+    protected abstract double calcularPreco(Roupa b);
+
+    @Override
     public String toString() {
-        return "Nome: " + getNome() +"\n"+"Id: "+ getId()+"\n"+ "Valor: " + getValor() +"\n"+ "Em Estoque: " + getEstoque()
-                +"\n"+ "Tamanho: "+ getTamanho() + "\n"+ "------------------------";
+        return getNome() + "|" + getCategoria() + "|" + getId() + "|" + getPrecoBase() + "|" + getEstoque() + "|" + getTamanho();
     }
 }
 
